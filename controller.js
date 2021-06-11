@@ -18,6 +18,7 @@ exports.tampilsemuamahasiswa = function (req, res) {
   });
 };
 
+
 //menampilakn berdasarkan id
 exports.tampilbedasarkanid = function (req, res) {
   let id = req.params.id;
@@ -47,6 +48,115 @@ exports.tambahMahasiswa = function (req, res) {
         console.log(error);
       } else {
         response.ok("Berhasil Menambahkan Data!", res);
+      }
+    }
+  );
+};
+
+//menambahkan data barang
+exports.tambahBarang = function (req, res) {
+  var id_kategori = req.body.id_kategori;
+  var id_status = req.body.id_status;
+  var nama = req.body.nama;
+  var harga = req.body.harga;
+  var gambar = req.body.gambar;
+  var keterangan = req.body.keterangan;
+  connection.query(
+    "INSERT INTO barang (id_kategori, id_status, nama, harga, gambar, keterangan) VALUES (?, ?, ?, ?, ?, ?)",
+    [id_kategori, id_status, nama, harga, gambar, keterangan],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Menambahkan Data!", res);
+      }
+    }
+  );
+};
+
+//menampilkan semua data barang
+exports.tampilBarang = function (req, res) {
+  connection.query("SELECT barang.id_barang, barang.nama, barang.harga, barang.keterangan, status.status_barang, kategori.kategori_barang FROM barang JOIN kategori JOIN status WHERE barang.id_kategori = kategori.id AND barang.id_status = status.id_status ORDER BY barang.id_barang", function (error, rows, field) {
+    if (error) {
+      console.log(error);
+    } else {
+      response.ok(rows, res);
+    }
+  });
+};
+
+//menghapus data barang berdasarkan id
+exports.hapusBarang = function (req, res) {
+  var id = req.body.id_barang;
+  connection.query(
+    "DELETE FROM barang WHERE id_barang=?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil hapus data", res);
+      }
+    }
+  );
+};
+
+//menampilkan data barang berdasarkan id
+exports.tampilbarangid = function (req, res) {
+  let id = req.params.id;
+  connection.query(
+    "SELECT * FROM barang WHERE id_barang=?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+
+
+//menampilkan semua data status
+exports.tampilStatus = function (req, res) {
+  connection.query("SELECT * FROM status", function (error, rows, field) {
+    if (error) {
+      console.log(error);
+    } else {
+      response.ok(rows, res);
+    }
+  });
+};
+//menampilkan semua data kategori
+exports.tampilKategori = function (req, res) {
+  connection.query("SELECT * FROM kategori", function (error, rows, field) {
+    if (error) {
+      console.log(error);
+    } else {
+      response.ok(rows, res);
+    }
+  });
+};
+
+//mengubah data barang berdasarkan id
+exports.ubahBarang = function (req, res) {
+  var id = req.body.id_barang;
+  var id_kategori = req.body.id_kategori;
+  var id_status = req.body.id_status;
+  var nama = req.body.nama;
+  var harga = req.body.harga;
+  var keterangan = req.body.keterangan;
+
+  connection.query(
+    "UPDATE barang SET id_kategori = ?, id_status = ?, nama = ?, harga = ?, keterangan = ? WHERE barang.id_barang = ?",
+    [id_kategori, id_status, nama, harga, keterangan, id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Mengubah Data!", res);
       }
     }
   );
@@ -92,7 +202,7 @@ exports.hapusMahasiswa = function (req, res) {
 exports.tampilgroupmatakuliah = function (req, res) {
   connection.query(
     "SELECT mahasiswa.id_mahasiswa, mahasiswa.nim, mahasiswa.nama, mahasiswa.jurusan, matakuliah.matakuliah, matakuliah.sks from krs JOIN matakuliah JOIN mahasiswa WHERE krs.id_matakuliah = matakuliah.id_matakuliah AND krs.id_mahasiswa = mahasiswa.id_mahasiswa ORDER BY mahasiswa.id_mahasiswa",
-    function (error, rows, fields) {
+    function (error, rows, fields)  {
       if (error) {
         console.log(error);
       }else{
