@@ -19,7 +19,7 @@ exports.tampilsemuamahasiswa = function (req, res) {
 };
 
 
-//menampilakn berdasarkan id
+//menampilkann berdasarkan id
 exports.tampilbedasarkanid = function (req, res) {
   let id = req.params.id;
   connection.query(
@@ -52,6 +52,58 @@ exports.tambahMahasiswa = function (req, res) {
     }
   );
 };
+
+//mengubah data berdasarkan id
+exports.ubahMahasiswa = function (req, res) {
+  var id = req.body.id_mahasiswa;
+  var nim = req.body.nim;
+  var nama = req.body.nama;
+  var jurusan = req.body.jurusan;
+
+  connection.query(
+    "UPDATE mahasiswa set nim=?, nama=?, jurusan=? WHERE id_mahasiswa=?",
+    [nim, nama, jurusan, id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Mengubah Data!", res);
+      }
+    }
+  );
+};
+
+//menghapus data berdasarkan id
+exports.hapusMahasiswa = function (req, res) {
+  var id = req.body.id_mahasiswa;
+  connection.query(
+    "DELETE FROM mahasiswa WHERE id_mahasiswa=?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil hapus data", res);
+      }
+    }
+  );
+};
+
+//menampilakn matakuliah group
+exports.tampilgroupmatakuliah = function (req, res) {
+  connection.query(
+    "SELECT mahasiswa.id_mahasiswa, mahasiswa.nim, mahasiswa.nama, mahasiswa.jurusan, matakuliah.matakuliah, matakuliah.sks from krs JOIN matakuliah JOIN mahasiswa WHERE krs.id_matakuliah = matakuliah.id_matakuliah AND krs.id_mahasiswa = mahasiswa.id_mahasiswa ORDER BY mahasiswa.id_mahasiswa",
+    function (error, rows, fields)  {
+      if (error) {
+        console.log(error);
+      }else{
+        response.oknested(rows, res);
+      }
+    }
+  );
+};
+
+/*===================BARANG=================*/
 
 //menambahkan data barang
 exports.tambahBarang = function (req, res) {
@@ -117,8 +169,6 @@ exports.tampilbarangid = function (req, res) {
   );
 };
 
-
-
 //menampilkan semua data status
 exports.tampilStatus = function (req, res) {
   connection.query("SELECT * FROM status", function (error, rows, field) {
@@ -162,31 +212,44 @@ exports.ubahBarang = function (req, res) {
   );
 };
 
-//mengubah data berdasarkan id
-exports.ubahMahasiswa = function (req, res) {
-  var id = req.body.id_mahasiswa;
-  var nim = req.body.nim;
-  var nama = req.body.nama;
-  var jurusan = req.body.jurusan;
+/*===================SIMPANAN=================*/
 
+//menampilkan semua data simpanan
+exports.tampilSimpanan = function (req, res) {
+  connection.query("SELECT simpan.id_simpanan, simpan.id_user, simpan.jumlah_simpanan, simpan.terbilang, simpan.tanggal_simpan, user.id, user.username FROM simpan JOIN user WHERE simpan.id_user = user.id ORDER BY simpan.id_simpanan", function (error, rows, field) {
+    if (error) {
+      console.log(error);
+    } else {
+      response.ok(rows, res);
+    }
+  });
+};
+
+//menambahkan simpanan
+exports.tambahSimpanan = function (req, res) {
+  var id_user = req.body.id_user;
+  var jumlah_simpanan = req.body.jumlah_simpanan;
+  var terbilang = req.body.terbilang;
+  var tanggal_simpan = req.body.tanggal_simpan;
+  // var bukti_transfer = req.body.bukti_transfer;
   connection.query(
-    "UPDATE mahasiswa set nim=?, nama=?, jurusan=? WHERE id_mahasiswa=?",
-    [nim, nama, jurusan, id],
+    "INSERT INTO simpan (id_user, jumlah_simpanan, terbilang, tanggal_simpan) VALUES (?, ?, ?, ?)",
+    [id_user, jumlah_simpanan, terbilang, tanggal_simpan],
     function (error, rows, field) {
       if (error) {
         console.log(error);
       } else {
-        response.ok("Berhasil Mengubah Data!", res);
+        response.ok("Berhasil Menambahkan Data!", res);
       }
     }
   );
 };
 
-//menghapus data berdasarkan id
-exports.hapusMahasiswa = function (req, res) {
-  var id = req.body.id_mahasiswa;
+//menghapus data simpanan berdasarkan id
+exports.hapusSimpanan = function (req, res) {
+  var id = req.body.id_simpanan;
   connection.query(
-    "DELETE FROM mahasiswa WHERE id_mahasiswa=?",
+    "DELETE FROM simpan WHERE id_simpanan=?",
     [id],
     function (error, rows, field) {
       if (error) {
@@ -198,15 +261,36 @@ exports.hapusMahasiswa = function (req, res) {
   );
 };
 
-//menampilakn matakuliah group
-exports.tampilgroupmatakuliah = function (req, res) {
+//menampilkan data simpanan berdasarkan id
+exports.tampilsimpananid = function (req, res) {
+  let id = req.params.id;
   connection.query(
-    "SELECT mahasiswa.id_mahasiswa, mahasiswa.nim, mahasiswa.nama, mahasiswa.jurusan, matakuliah.matakuliah, matakuliah.sks from krs JOIN matakuliah JOIN mahasiswa WHERE krs.id_matakuliah = matakuliah.id_matakuliah AND krs.id_mahasiswa = mahasiswa.id_mahasiswa ORDER BY mahasiswa.id_mahasiswa",
-    function (error, rows, fields)  {
+    "SELECT * FROM simpan join user WHERE simpan.id_user = user.id AND id_simpanan=?",
+    [id],
+    function (error, rows, field) {
       if (error) {
         console.log(error);
-      }else{
-        response.oknested(rows, res);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//ubah data simpanan
+exports.ubahSimpanan = function (req, res) {
+  var id = req.body.id_simpanan;
+  var jumlah_simpanan = req.body.jumlah_simpanan;
+  var terbilang = req.body.terbilang;
+
+  connection.query(
+    "UPDATE simpan SET jumlah_simpanan = ?, terbilang = ? WHERE simpan.id_simpanan = ?",
+    [jumlah_simpanan, terbilang, id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Mengubah Data!", res);
       }
     }
   );

@@ -64,7 +64,8 @@ exports.login = function(req, res){
                 });
                 id_user = rows[0].id;
                 username = rows[0].username;
-                role = rows[0].role;  
+                role = rows[0].role;
+                id = rows[0].id
 
                 var expired = 30000
 
@@ -89,6 +90,7 @@ exports.login = function(req, res){
                              expires: expired,
                              currUser: data.id_user,
                              user: username,
+                             id: id,
                              role: role
                          });
                     }

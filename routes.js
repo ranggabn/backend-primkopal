@@ -5,6 +5,7 @@ module.exports = function (app) {
 
   app.route("/").get(jsonku.index);
 
+  /*=================BARANG==============*/
   app.route("/tambahBarang").post(jsonku.tambahBarang);
 
   app.route("/tampilBarang").get(jsonku.tampilBarang);
@@ -17,8 +18,20 @@ module.exports = function (app) {
 
   app.route("/hapusBarang").delete(jsonku.hapusBarang);
 
-  app.route('/ubahBarang').put(jsonku.ubahBarang);
+  app.route("/ubahBarang").put(jsonku.ubahBarang);
 
+  /*=================SIMPANAN==============*/
+  app.route("/tampilSimpanan").get(jsonku.tampilSimpanan);
+
+  app.route("/tampilSimpanan/:id").get(jsonku.tampilsimpananid);
+
+  app.route("/tambahSimpanan").post(jsonku.tambahSimpanan);
+
+  app.route("/hapusSimpanan").delete(jsonku.hapusSimpanan);
+
+  app.route("/ubahSimpanan").put(jsonku.ubahSimpanan);
+
+  /*=================SIMPANAN==============*/
   app.route("/tampil").get(jsonku.tampilsemuamahasiswa);
 
   app.route("/tampil/:id").get(jsonku.tampilbedasarkanid);
