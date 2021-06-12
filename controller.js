@@ -295,3 +295,112 @@ exports.ubahSimpanan = function (req, res) {
     }
   );
 };
+
+
+/*===================KREDIT=================*/
+
+//menambahkan data kredit
+exports.tambahKredit = function (req, res) {
+  var id_user = req.body.id_user;
+  var id_status = req.body.id_status;
+  var id_cicilan = req.body.id_cicilan;
+  var satker = req.body.satker;
+  var nomor_telefon = req.body.nomor_telefon;
+  var nama_barang = req.body.nama_barang;
+  var harga = req.body.harga;
+  var terbilang = req.body.terbilang;
+  // var cicil = req.body.cicil;
+  var tanggal_kredit = req.body.tanggal_kredit;  
+  connection.query(
+    "INSERT INTO kredit (id_user, id_status, id_cicil, satker, nomor_telefon, nama_barang, harga, terbilang, tanggal_kredit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    [id_user, id_status, id_cicilan, satker, nomor_telefon, nama_barang, harga, terbilang, tanggal_kredit],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Menambahkan Data!", res);
+      }
+    }
+  );
+};
+
+//menampilkan status
+exports.tampilStatusKP = function (req, res) {
+  connection.query("SELECT * FROM status_kredit_pinjaman", function (error, rows, field) {
+    if (error) {
+      console.log(error);
+    } else {
+      response.ok(rows, res);
+    }
+  });
+};
+
+//menampilkan cicilan berdasarkan tipe
+exports.tampilCicilan = function (req, res) {
+  let tipe_cicilan = req.params.tipe_cicilan;
+  connection.query("SELECT * FROM cicilan WHERE cicilan.tipe_cicilan = ?", [tipe_cicilan], 
+  function (error, rows, field) {
+    if (error) {
+      console.log(error);
+    } else {
+      response.ok(rows, res);
+    }
+  });
+};
+
+//menampilkan cicilan
+exports.tampilAllCicilan = function (req, res) {  
+  connection.query("SELECT * FROM cicilan", function (error, rows, field) {
+    if (error) {
+      console.log(error);
+    } else {
+      response.ok(rows, res);
+    }
+  });
+};
+
+//menampilkan data simpanan
+exports.tampilkredit = function (req, res) {
+  connection.query("SELECT * FROM kredit join user join status_kredit_pinjaman join cicilan WHERE kredit.id_user = user.id AND kredit.id_status = status_kredit_pinjaman.id_statusKP AND kredit.id_cicil = cicilan.id_cicilan ORDER BY kredit.id_kredit",
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//menampilkan data kredit berdasarkan id
+exports.tampilkreditid = function (req, res) {
+  let id = req.params.id;
+  connection.query(
+    "SELECT * FROM kredit join user WHERE kredit.id_user = user.id AND id_kredit=?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//hapus data kredit
+exports.hapusKredit = function (req, res) {
+  var id = req.body.id_kredit;
+  connection.query(
+    "DELETE FROM kredit WHERE id_kredit=?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil hapus data", res);
+      }
+    }
+  );
+};
+
