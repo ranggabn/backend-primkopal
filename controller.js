@@ -309,7 +309,7 @@ exports.tambahKredit = function (req, res) {
   var nama_barang = req.body.nama_barang;
   var harga = req.body.harga;
   var terbilang = req.body.terbilang;
-  // var cicil = req.body.cicil;
+  // var besar_cicilan = req.body.besar_cicilan;
   var tanggal_kredit = req.body.tanggal_kredit;  
   connection.query(
     "INSERT INTO kredit (id_user, id_status, id_cicil, satker, nomor_telefon, nama_barang, harga, terbilang, tanggal_kredit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -359,7 +359,7 @@ exports.tampilAllCicilan = function (req, res) {
   });
 };
 
-//menampilkan data simpanan
+//menampilkan data kredit
 exports.tampilkredit = function (req, res) {
   connection.query("SELECT * FROM kredit join user join status_kredit_pinjaman join cicilan WHERE kredit.id_user = user.id AND kredit.id_status = status_kredit_pinjaman.id_statusKP AND kredit.id_cicil = cicilan.id_cicilan ORDER BY kredit.id_kredit",
     function (error, rows, field) {
@@ -404,3 +404,148 @@ exports.hapusKredit = function (req, res) {
   );
 };
 
+//ubah data kredit
+exports.ubahKredit = function (req, res) {
+  var id = req.body.id_kredit;
+  var id_cicil = req.body.id_cicil;
+  var id_status = req.body.id_status
+  var nama_barang = req.body.nama_barang;
+  var harga = req.body.harga;  
+  var terbilang = req.body.terbilang;
+  // var besar_cicilan = req.body.besar_cicilan
+  connection.query(
+    "UPDATE kredit SET id_cicil = ?, id_status = ?, nama_barang = ?, harga = ?, terbilang = ? WHERE kredit.id_kredit = ?",
+    [id_cicil, id_status, nama_barang, harga, terbilang, id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Mengubah Data!", res);
+      }
+    }
+  );
+};
+
+/*===================PINJAMAN=================*/
+//menampilkan cicilan
+exports.tampilPeraturan= function (req, res) {  
+  connection.query("SELECT * FROM peraturan", function (error, rows, field) {
+    if (error) {
+      console.log(error);
+    } else {
+      response.ok(rows, res);
+    }
+  });
+};
+
+//menambahkan data pinjaman
+exports.tambahPinjaman = function (req, res) {  
+  var id_user = req.body.id_user;
+  var id_status = req.body.id_status;
+  var id_cicil = req.body.id_cicil;
+  var satker = req.body.satker;
+  var nomor_telefon = req.body.nomor_telefon;
+  var besar_pinjaman = req.body.besar_pinjaman;  
+  var terbilang = req.body.terbilang;
+  var keperluan = req.body.keperluan;
+  // var besar_cicilan = req.body.besar_cicilan;
+  // var kta = req.body.kta;
+  // var ktp_pemohon = req.body.ktp_pemohon;
+  // var ktp_pasangan = req.body.ktp_pasangan;
+  // var slip_gaji = req.body.slip_gaji;
+  // var rincian_gaji = req.body.rincian_gaji;
+  // var kk = req.body.kk;
+  // var spk = req.body.spk;
+  // var asuransi = req.body.asuransi;
+  // var bebas_hutang = req.body.bebas_hutang;
+  var tanggal_pinjam = req.body.tanggal_pinjam;  
+  connection.query(
+    "INSERT INTO pinjaman (id_user, id_status, id_cicil, satker, nomor_telefon, besar_pinjaman, terbilang, keperluan, tanggal_pinjam) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    [id_user, id_status, id_cicil, satker, nomor_telefon, besar_pinjaman, terbilang, keperluan, tanggal_pinjam],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Menambahkan Data!", res);
+      }
+    }
+  );
+};
+
+//menampilkan data pinjaman
+exports.tampilPinjaman = function (req, res) {
+  connection.query("SELECT * FROM pinjaman join user join status_kredit_pinjaman join cicilan WHERE pinjaman.id_user = user.id AND pinjaman.id_status = status_kredit_pinjaman.id_statusKP AND pinjaman.id_cicil = cicilan.id_cicilan ORDER BY pinjaman.id_pinjaman",
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//hapus data pinjaman
+exports.hapusPinjaman = function (req, res) {
+  var id = req.body.id_pinjaman;
+  connection.query(
+    "DELETE FROM pinjaman WHERE id_pinjaman=?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil hapus data", res);
+      }
+    }
+  );
+};
+
+//menampilkan data pinjaman berdasarkan id
+exports.tampilpinjamanid = function (req, res) {
+  let id = req.params.id;
+  connection.query(
+    "SELECT * FROM pinjaman join user WHERE pinjaman.id_user = user.id AND id_pinjaman=?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//ubah data pinjaman
+exports.ubahPinjaman = function (req, res) {
+  var id = req.body.id_pinjaman;
+  var id_cicil = req.body.id_cicil;
+  var id_status = req.body.id_status
+  var satker = req.body.satker;
+  var nomor_telefon = req.body.nomor_telefon;
+  var besar_pinjaman = req.body.besar_pinjaman;  
+  var terbilang = req.body.terbilang;
+  var keperluan = req.body.keperluan;
+  // var besar_cicilan = req.body.besar_cicilan;
+  // var kta = req.body.kta;
+  // var ktp_pemohon = req.body.ktp_pemohon;
+  // var ktp_pasangan = req.body.ktp_pasangan;
+  // var slip_gaji = req.body.slip_gaji;
+  // var rincian_gaji = req.body.rincian_gaji;
+  // var kk = req.body.kk;
+  // var spk = req.body.spk;
+  // var asuransi = req.body.asuransi;
+  // var bebas_hutang = req.body.bebas_hutang;
+  connection.query(
+    "UPDATE pinjaman SET id_cicil = ?, id_status = ? satker = ?, nomor_telefon = ?, besar_pinjaman = ?, terbilang = ?, keperluan = ? WHERE pinjaman.id_pinjaman = ?",
+    [id_cicil, id_status, satker, nomor_telefon, besar_pinjaman, terbilang, keperluan, id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Mengubah Data!", res);
+      }
+    }
+  );
+};

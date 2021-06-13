@@ -42,7 +42,25 @@ module.exports = function (app) {
 
   app.route("/tampilKredit").get(jsonku.tampilkredit);
 
+  app.route("/tampilKredit/:id").get(jsonku.tampilkreditid);
+
   app.route("/hapusKredit").delete(jsonku.hapusKredit);
+
+  app.route("/ubahKredit").put(jsonku.ubahKredit);
+
+  /*=================PINJAMAN==============*/
+
+  app.route("/tampilPeraturan").get(jsonku.tampilPeraturan);
+
+  app.route("/tampilPinjaman").get(jsonku.tampilPinjaman);
+
+  app.route("/tampilPinjaman/:id").get(jsonku.tampilpinjamanid);
+
+  app.route("/tambahPinjaman").post(jsonku.tambahPinjaman);
+
+  app.route("/hapusPinjaman").delete(jsonku.hapusPinjaman);
+
+  app.route("/ubahPinjaman").put(jsonku.ubahPinjaman);
 
   /*=================MAHASISWA==============*/
   app.route("/tampil").get(jsonku.tampilsemuamahasiswa);
