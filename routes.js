@@ -25,6 +25,8 @@ module.exports = function (app) {
 
   app.route("/tampilSimpanan/:id").get(jsonku.tampilsimpananid);
 
+  app.route("/tampilSimpananuser/:id_user").get(jsonku.tampilsimpananiduser);
+
   app.route("/tambahSimpanan").post(jsonku.tambahSimpanan);
 
   app.route("/hapusSimpanan").delete(jsonku.hapusSimpanan);
@@ -44,6 +46,8 @@ module.exports = function (app) {
 
   app.route("/tampilKredit/:id").get(jsonku.tampilkreditid);
 
+  app.route("/tampilKreditUser/:id_user").get(jsonku.tampilkreditiduser);
+
   app.route("/hapusKredit").delete(jsonku.hapusKredit);
 
   app.route("/ubahKredit").put(jsonku.ubahKredit);
@@ -56,11 +60,18 @@ module.exports = function (app) {
 
   app.route("/tampilPinjaman/:id").get(jsonku.tampilpinjamanid);
 
+  app.route("/tampilPinjamanUser/:id_user").get(jsonku.tampilpinjamaniduser);
+
   app.route("/tambahPinjaman").post(jsonku.tambahPinjaman);
 
   app.route("/hapusPinjaman").delete(jsonku.hapusPinjaman);
 
   app.route("/ubahPinjaman").put(jsonku.ubahPinjaman);
+
+  /*=================TOKO==============*/
+  app.route("/tampilKategori").get(jsonku.tampilKategori);
+
+  app.route("/tampilbarangIdKategori/:id").get(jsonku.tampilbarangidkategori)
 
   /*=================MAHASISWA==============*/
   app.route("/tampil").get(jsonku.tampilsemuamahasiswa);

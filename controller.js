@@ -18,7 +18,6 @@ exports.tampilsemuamahasiswa = function (req, res) {
   });
 };
 
-
 //menampilkann berdasarkan id
 exports.tampilbedasarkanid = function (req, res) {
   let id = req.params.id;
@@ -128,7 +127,7 @@ exports.tambahBarang = function (req, res) {
 
 //menampilkan semua data barang
 exports.tampilBarang = function (req, res) {
-  connection.query("SELECT barang.id_barang, barang.nama, barang.harga, barang.keterangan, status.status_barang, kategori.kategori_barang FROM barang JOIN kategori JOIN status WHERE barang.id_kategori = kategori.id AND barang.id_status = status.id_status ORDER BY barang.id_barang", function (error, rows, field) {
+  connection.query("SELECT barang.id_barang, barang.gambar, barang.nama, barang.harga, barang.keterangan, status.status_barang, kategori.kategori_barang FROM barang JOIN kategori JOIN status WHERE barang.id_kategori = kategori.id AND barang.id_status = status.id_status ORDER BY barang.id_barang", function (error, rows, field) {
     if (error) {
       console.log(error);
     } else {
@@ -158,6 +157,22 @@ exports.tampilbarangid = function (req, res) {
   let id = req.params.id;
   connection.query(
     "SELECT * FROM barang WHERE id_barang=?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//menampilkan data barang berdasarkan id kategori
+exports.tampilbarangidkategori= function (req, res) {
+  let id = req.params.id;
+  connection.query(
+    "SELECT * FROM barang join status join kategori WHERE barang.id_kategori=kategori.id AND barang.id_status = status.id_status AND id_kategori=?",
     [id],
     function (error, rows, field) {
       if (error) {
@@ -216,7 +231,7 @@ exports.ubahBarang = function (req, res) {
 
 //menampilkan semua data simpanan
 exports.tampilSimpanan = function (req, res) {
-  connection.query("SELECT simpan.id_simpanan, simpan.id_user, simpan.jumlah_simpanan, simpan.terbilang, simpan.tanggal_simpan, user.id, user.username FROM simpan JOIN user WHERE simpan.id_user = user.id ORDER BY simpan.id_simpanan", function (error, rows, field) {
+  connection.query("SELECT simpan.id_simpanan, simpan.id_user, simpan.jumlah_simpanan, simpan.terbilang, simpan.tanggal_simpan, user.id, user.username FROM simpan JOIN user WHERE simpan.id_user = user.id ORDER BY simpan.tanggal_simpan DESC", function (error, rows, field) {
     if (error) {
       console.log(error);
     } else {
@@ -296,6 +311,21 @@ exports.ubahSimpanan = function (req, res) {
   );
 };
 
+//tampil simpanan user id
+exports.tampilsimpananiduser = function (req, res) {
+  let id_user = req.params.id_user;
+  connection.query(
+    "SELECT * FROM simpan join user WHERE simpan.id_user = user.id AND id_user=? ORDER BY tanggal_simpan DESC",
+    [id_user],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
 
 /*===================KREDIT=================*/
 
@@ -361,7 +391,23 @@ exports.tampilAllCicilan = function (req, res) {
 
 //menampilkan data kredit
 exports.tampilkredit = function (req, res) {
-  connection.query("SELECT * FROM kredit join user join status_kredit_pinjaman join cicilan WHERE kredit.id_user = user.id AND kredit.id_status = status_kredit_pinjaman.id_statusKP AND kredit.id_cicil = cicilan.id_cicilan ORDER BY kredit.id_kredit",
+  connection.query("SELECT * FROM kredit join user join status_kredit_pinjaman join cicilan WHERE kredit.id_user = user.id AND kredit.id_status = status_kredit_pinjaman.id_statusKP AND kredit.id_cicil = cicilan.id_cicilan ORDER BY kredit.tanggal_kredit DESC",
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//menampilkan data kredit berdasarkan id user
+exports.tampilkreditiduser = function (req, res) {
+  let id_user = req.params.id_user;
+  connection.query( 
+    "SELECT * FROM kredit join user join status_kredit_pinjaman WHERE kredit.id_user = user.id AND kredit.id_status = status_kredit_pinjaman.id_statusKP AND id_user=? ORDER BY tanggal_kredit DESC",
+    [id_user],
     function (error, rows, field) {
       if (error) {
         console.log(error);
@@ -409,13 +455,15 @@ exports.ubahKredit = function (req, res) {
   var id = req.body.id_kredit;
   var id_cicil = req.body.id_cicil;
   var id_status = req.body.id_status
+  var satker = req.body.satker
+  var nomor_telefon = req.body.nomor_telefon
   var nama_barang = req.body.nama_barang;
   var harga = req.body.harga;  
   var terbilang = req.body.terbilang;
-  // var besar_cicilan = req.body.besar_cicilan
+  var besar_cicilan = req.body.besar_cicilan
   connection.query(
-    "UPDATE kredit SET id_cicil = ?, id_status = ?, nama_barang = ?, harga = ?, terbilang = ? WHERE kredit.id_kredit = ?",
-    [id_cicil, id_status, nama_barang, harga, terbilang, id],
+    "UPDATE kredit SET id_cicil = ?, id_status = ?, satker = ?, nomor_telefon = ?, nama_barang = ?, harga = ?, terbilang = ?, besar_cicilan = ? WHERE kredit.id_kredit = ?",
+    [id_cicil, id_status, satker, nomor_telefon, nama_barang, harga, terbilang, besar_cicilan, id],
     function (error, rows, field) {
       if (error) {
         console.log(error);
@@ -474,7 +522,7 @@ exports.tambahPinjaman = function (req, res) {
 
 //menampilkan data pinjaman
 exports.tampilPinjaman = function (req, res) {
-  connection.query("SELECT * FROM pinjaman join user join status_kredit_pinjaman join cicilan WHERE pinjaman.id_user = user.id AND pinjaman.id_status = status_kredit_pinjaman.id_statusKP AND pinjaman.id_cicil = cicilan.id_cicilan ORDER BY pinjaman.id_pinjaman",
+  connection.query("SELECT * FROM pinjaman join user join status_kredit_pinjaman join cicilan WHERE pinjaman.id_user = user.id AND pinjaman.id_status = status_kredit_pinjaman.id_statusKP AND pinjaman.id_cicil = cicilan.id_cicilan ORDER BY pinjaman.tanggal_pinjam DESC",
     function (error, rows, field) {
       if (error) {
         console.log(error);
@@ -517,6 +565,22 @@ exports.tampilpinjamanid = function (req, res) {
   );
 };
 
+//menampilkan data pinjaman berdasarkan id user
+exports.tampilpinjamaniduser = function (req, res) {
+  let id_user = req.params.id_user;
+  connection.query(
+    "SELECT * FROM pinjaman join user join status_kredit_pinjaman WHERE pinjaman.id_user = user.id AND pinjaman.id_status = status_kredit_pinjaman.id_statusKP AND id_user=? ORDER BY tanggal_pinjam DESC",
+    [id_user],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
 //ubah data pinjaman
 exports.ubahPinjaman = function (req, res) {
   var id = req.body.id_pinjaman;
@@ -527,24 +591,30 @@ exports.ubahPinjaman = function (req, res) {
   var besar_pinjaman = req.body.besar_pinjaman;  
   var terbilang = req.body.terbilang;
   var keperluan = req.body.keperluan;
-  // var besar_cicilan = req.body.besar_cicilan;
-  // var kta = req.body.kta;
-  // var ktp_pemohon = req.body.ktp_pemohon;
-  // var ktp_pasangan = req.body.ktp_pasangan;
-  // var slip_gaji = req.body.slip_gaji;
-  // var rincian_gaji = req.body.rincian_gaji;
-  // var kk = req.body.kk;
-  // var spk = req.body.spk;
-  // var asuransi = req.body.asuransi;
-  // var bebas_hutang = req.body.bebas_hutang;
+  var besar_cicilan = req.body.besar_cicilan;
   connection.query(
-    "UPDATE pinjaman SET id_cicil = ?, id_status = ? satker = ?, nomor_telefon = ?, besar_pinjaman = ?, terbilang = ?, keperluan = ? WHERE pinjaman.id_pinjaman = ?",
-    [id_cicil, id_status, satker, nomor_telefon, besar_pinjaman, terbilang, keperluan, id],
+    "UPDATE pinjaman SET id_cicil = ?, id_status = ?, satker = ?, nomor_telefon = ?, besar_pinjaman = ?, terbilang = ?, keperluan = ?, besar_cicilan = ? WHERE pinjaman.id_pinjaman = ?",
+    [id_cicil, id_status, satker, nomor_telefon, besar_pinjaman, terbilang, keperluan, besar_cicilan, id],
     function (error, rows, field) {
       if (error) {
         console.log(error);
       } else {
         response.ok("Berhasil Mengubah Data!", res);
+      }
+    }
+  );
+};
+
+/*===================TOKO=================*/
+
+//menampilkan kategori barang
+exports.tampilKategori = function (req, res) {
+  connection.query("SELECT * FROM kategori ORDER BY kategori.id",
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
       }
     }
   );
