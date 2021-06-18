@@ -73,6 +73,10 @@ module.exports = function (app) {
 
   app.route("/tampilbarangIdKategori/:id").get(jsonku.tampilbarangidkategori)
 
+  app.route("/tambahKeranjang").post(jsonku.tambahKeranjang);
+
+  app.route("/tampilKeranjang/:id_user").get(jsonku.tampilKeranjangId);
+
   /*=================MAHASISWA==============*/
   app.route("/tampil").get(jsonku.tampilsemuamahasiswa);
 
