@@ -711,3 +711,53 @@ exports.tampilKeranjangId = function (req, res) {
   );
 };
 
+//menampilkan keranjang id barang
+exports.tampilKeranjangIdBarang = function (req, res) {
+  let id_barang = req.params.id_barang;
+  connection.query(
+    "SELECT * FROM keranjang join barang join user WHERE keranjang.id_barang = barang.id_barang AND keranjang.id_user = user.id AND keranjang.id_barang = ? ORDER BY keranjang.id",
+    [id_barang],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//ubah keranjang 
+exports.ubahKeranjang = function (req, res) {
+  var id_barang = req.body.id_barang;
+  var jumlah_harga = req.body.jumlah_harga;
+  var total_harga = req.body.total_harga;
+  var jumlah = req.body.jumlah;
+  connection.query(
+    "UPDATE keranjang SET jumlah_harga = ?, total_harga = ?, jumlah = ? WHERE keranjang.id_barang = ?",
+    [jumlah_harga, total_harga, jumlah, id_barang],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Mengubah Data!", res);
+      }
+    }
+  );
+};
+
+//menampilkan total harga id user
+exports.totalHarga = function (req, res) {
+  let id_user = req.params.id_user;
+  connection.query(
+    "SELECT SUM(jumlah_harga) AS total_harga FROM keranjang WHERE id_user = ?",
+    [id_user],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
