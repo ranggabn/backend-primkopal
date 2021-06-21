@@ -83,6 +83,10 @@ module.exports = function (app) {
 
   app.route("/totalHarga/:id_user").get(jsonku.totalHarga);
 
+  app.route("/hapusKeranjangId").delete(jsonku.hapusKeranjangId);
+
+  app.route("/hapusKeranjangIdUser").delete(jsonku.hapusKeranjangIdUser);
+
   /*=================MAHASISWA==============*/
   app.route("/tampil").get(jsonku.tampilsemuamahasiswa);
 

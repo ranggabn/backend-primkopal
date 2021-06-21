@@ -761,3 +761,35 @@ exports.totalHarga = function (req, res) {
     }
   );
 };
+
+//hapus list keranjang
+exports.hapusKeranjangId = function (req, res) {
+  var id = req.body.id_barang;
+  connection.query(
+    "DELETE FROM keranjang WHERE id_barang = ?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil hapus data", res);
+      }
+    }
+  );
+};
+
+//hapus list keranjang
+exports.hapusKeranjangIdUser = function (req, res) {
+  var id = req.body.id_user;
+  connection.query(
+    "DELETE FROM keranjang WHERE id_user = ?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil hapus data", res);
+      }
+    }
+  );
+};
