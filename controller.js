@@ -682,9 +682,11 @@ exports.tambahKeranjang = function (req, res) {
   var jumlah_harga = req.body.jumlah_harga;
   var total_harga = req.body.total_harga;
   var jumlah = req.body.jumlah;
+  var status = req.body.status
+  var tanggal_penjualan = req.body.tanggal_penjualan;
   connection.query(
-    "INSERT INTO keranjang (id_user, id_barang, jumlah_harga, total_harga, jumlah) VALUES (?, ?, ?, ?, ?)",
-    [id_user, id_barang, jumlah_harga, total_harga, jumlah],
+    "INSERT INTO keranjang (id_user, id_barang, jumlah_harga, total_harga, jumlah, status, tanggal_penjualan) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    [id_user, id_barang, jumlah_harga, total_harga, jumlah, status, tanggal_penjualan],
     function (error, rows, field) {
       if (error) {
         console.log(error);
@@ -727,7 +729,7 @@ exports.tampilKeranjangIdBarang = function (req, res) {
   );
 };
 
-//ubah keranjang 
+//ubah keranjang
 exports.ubahKeranjang = function (req, res) {
   var id_barang = req.body.id_barang;
   var jumlah_harga = req.body.jumlah_harga;
@@ -783,6 +785,116 @@ exports.hapusKeranjangIdUser = function (req, res) {
   var id = req.body.id_user;
   connection.query(
     "DELETE FROM keranjang WHERE id_user = ?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil hapus data", res);
+      }
+    }
+  );
+};
+
+//tambah data penjualan
+exports.tambahPenjualan = function (req, res) {
+  var values = [
+    {
+      id_barang: req.body.id_barang,
+      id_user: req.body.id_user,
+      jumlah: req.body.jumlah,
+      jumlah_harga: req.body.jumlah_harga,
+      status: req.body.status,
+      tanggal_penjualan: req.body.tanggal_penjualan,      
+    },
+  ];
+  connection.query(
+    "INSERT INTO penjualan (id_barang, id_user, jumlah, jumlah_harga, status, tanggal_penjualan) VALUES ?",
+    [
+      values.map((values) => [
+        values.id_barang,
+        values.id_user,
+        values.jumlah,
+        values.jumlah_harga,
+        values.status,
+        values.tanggal_penjualan
+      ]),
+    ],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Menambahkan Data!", res);
+      }
+    }
+  );
+};
+
+//menampilkan keranjang id user
+exports.tampilKeranjangIdUser = function (req, res) {
+  let id_user = req.params.id_user;
+  connection.query(
+    "SELECT keranjang.id_barang, keranjang.id_user, jumlah_harga, jumlah, tanggal_penjualan, status FROM keranjang join barang join user WHERE keranjang.id_barang = barang.id_barang AND keranjang.id_user = user.id AND keranjang.id_user = ? ORDER BY keranjang.id",
+    [id_user],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//menampilkan semua data penjualan
+exports.tampilPenjualan = function (req, res) {
+  connection.query(
+    "SELECT * FROM penjualan join barang join user WHERE penjualan.id_barang = barang.id_barang AND penjualan.id_user = user.id ORDER BY penjualan.id_penjualan",
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//hapus list penjualan
+exports.hapusPenjualan = function (req, res) {
+  var id = req.body.id_penjualan;
+  connection.query(
+    "DELETE FROM penjualan WHERE penjualan.id_penjualan = ?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil hapus data", res);
+      }
+    }
+  );
+};
+
+//menampilkan semua data user
+exports.tampilUser = function (req, res) {
+  connection.query(
+    "SELECT * FROM user ORDER BY user.tanggal_daftar DESC",
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//hapus user
+exports.hapusUser = function (req, res) {
+  var id = req.body.id;
+  connection.query(
+    "DELETE FROM user WHERE user.id = ?",
     [id],
     function (error, rows, field) {
       if (error) {

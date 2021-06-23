@@ -8,6 +8,6 @@ router.post('/api/v1/login', auth.login);
 
 //alamat yang perlu otorisasi
 router.get('/api/v1/rahasia', verifikasi(), auth.halamanrahasia);
-router.get('/api/v1/admin/mahasiswa', verifikasi(1), auth.adminmahasiswa);
+// router.get('/api/v1/admin/mahasiswa', verifikasi(1), auth.adminmahasiswa);
 
 module.exports = router;

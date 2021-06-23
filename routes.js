@@ -77,18 +77,26 @@ module.exports = function (app) {
 
   app.route("/tampilKeranjang/:id_user").get(jsonku.tampilKeranjangId);
 
+  app.route("/tampilKeranjangUser/:id_user").get(jsonku.tampilKeranjangIdUser);
+
   app.route("/tampilKeranjangBarang/:id_barang").get(jsonku.tampilKeranjangIdBarang);
 
   app.route("/ubahKeranjang").put(jsonku.ubahKeranjang);
 
   app.route("/totalHarga/:id_user").get(jsonku.totalHarga);
 
+  app.route("/tampilJual").get(jsonku.tampilPenjualan);
+
   app.route("/hapusKeranjangId").delete(jsonku.hapusKeranjangId);
 
   app.route("/hapusKeranjangIdUser").delete(jsonku.hapusKeranjangIdUser);
 
+  app.route("/tambahJual").post(jsonku.tambahPenjualan);
+
+  app.route("/hapusJual").delete(jsonku.hapusPenjualan);
+
   /*=================MAHASISWA==============*/
-  app.route("/tampil").get(jsonku.tampilsemuamahasiswa);
+  app.route("/tampil").get(jsonku.tampilUser);
 
   app.route("/tampil/:id").get(jsonku.tampilbedasarkanid);
 
@@ -96,7 +104,7 @@ module.exports = function (app) {
 
   app.route("/edit").put(jsonku.ubahMahasiswa);
 
-  app.route("/hapus").delete(jsonku.hapusMahasiswa);
+  app.route("/hapus").delete(jsonku.hapusUser);
 
   app.route("/tampilmatakuliah").get(jsonku.tampilgroupmatakuliah);
 };
