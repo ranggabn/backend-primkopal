@@ -98,13 +98,9 @@ module.exports = function (app) {
   /*=================MAHASISWA==============*/
   app.route("/tampil").get(jsonku.tampilUser);
 
-  app.route("/tampil/:id").get(jsonku.tampilbedasarkanid);
+  app.route("/tampil/:id").get(jsonku.tampilUserId);  
 
-  app.route("/tambah").post(jsonku.tambahMahasiswa);
-
-  app.route("/edit").put(jsonku.ubahMahasiswa);
+  app.route("/ubah").put(jsonku.ubahAnggota);
 
   app.route("/hapus").delete(jsonku.hapusUser);
-
-  app.route("/tampilmatakuliah").get(jsonku.tampilgroupmatakuliah);
 };

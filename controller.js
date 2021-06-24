@@ -905,3 +905,40 @@ exports.hapusUser = function (req, res) {
     }
   );
 };
+
+//menampilkan semua data user
+exports.tampilUserId = function (req, res) {
+  let id = req.params.id;
+  connection.query(
+    "SELECT * FROM user WHERE user.id=?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//ubah anggota
+exports.ubahAnggota = function (req, res) {
+  var id = req.body.id;
+  var username = req.body.username;
+  var satker = req.body.satker;
+  var tempat_lahir = req.body.tempat_lahir;
+  var tanggal_lahir = req.body.tanggal_lahir;
+  var nomor_telefon = req.body.nomor_telefon;
+  connection.query(
+    "UPDATE user SET id = ?, username = ?, satker = ?, tempat_lahir = ?, tanggal_lahir = ?, nomor_telefon = ? WHERE user.id = ?",
+    [id, username, satker, tempat_lahir, tanggal_lahir, nomor_telefon, id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Mengubah Data!", res);
+      }
+    }
+  );
+};
