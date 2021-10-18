@@ -20,6 +20,8 @@ module.exports = function (app) {
 
   app.route("/ubahBarang").put(jsonku.ubahBarang);
 
+  app.route("/ubahBarang2").put(jsonku.ubahBarang2);
+
   /*=================SIMPANAN==============*/
   app.route("/tampilSimpanan").get(jsonku.tampilSimpanan);
 
@@ -85,22 +87,32 @@ module.exports = function (app) {
 
   app.route("/totalHarga/:id_user").get(jsonku.totalHarga);
 
-  app.route("/tampilJual").get(jsonku.tampilPenjualan);
-
   app.route("/hapusKeranjangId").delete(jsonku.hapusKeranjangId);
 
   app.route("/hapusKeranjangIdUser").delete(jsonku.hapusKeranjangIdUser);
+
+  /*================PENJUALAN=============*/
+
+  app.route("/tampilJual").get(jsonku.tampilPenjualan);
+
+  app.route("/tampilPengambilan").get(jsonku.tampilPengambilan);
 
   app.route("/tambahJual").post(jsonku.tambahPenjualan);
 
   app.route("/hapusJual").delete(jsonku.hapusPenjualan);
 
-  /*=================MAHASISWA==============*/
+  /*=================USER==============*/
   app.route("/tampil").get(jsonku.tampilUser);
+
+  app.route("/tambahAnggota").post(jsonku.tambahAnggota);
+
+  app.route("/tampilRole").get(jsonku.tampilRole);
 
   app.route("/tampil/:id").get(jsonku.tampilUserId);  
 
   app.route("/ubah").put(jsonku.ubahAnggota);
+
+  app.route("/ubahProfil").put(jsonku.ubahProfil);
 
   app.route("/hapus").delete(jsonku.hapusUser);
 };

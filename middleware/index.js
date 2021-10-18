@@ -5,6 +5,8 @@ var verifikasi = require('./verifikasi');
 
 router.post('/api/v1/register', auth.reqistrasi);
 router.post('/api/v1/login', auth.login);
+router.post('/api/v1/ubahpassword', auth.ubahpassword);
+// router.post('/api/v1/ubahprofil', auth.ubahprofil);
 
 //alamat yang perlu otorisasi
 router.get('/api/v1/rahasia', verifikasi(), auth.halamanrahasia);
