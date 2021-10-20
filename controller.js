@@ -748,6 +748,40 @@ exports.tambahPenjualan = function (req, res) {
   );
 };
 
+//tambah data pengambilan
+exports.tambahPengambilan = function (req, res) {
+  var values = [
+    {
+      id_barang: req.body.id_barang,
+      id_user: req.body.id_user,
+      jumlah: req.body.jumlah,
+      jumlah_harga: req.body.jumlah_harga,
+      status: req.body.status,
+      tanggal_penjualan: req.body.tanggal_penjualan,      
+    },
+  ];
+  connection.query(
+    "INSERT INTO pengambilan (id_barang, id_user, jumlah, jumlah_harga, status, tanggal_penjualan) VALUES ?",
+    [
+      values.map((values) => [
+        values.id_barang,
+        values.id_user,
+        values.jumlah,
+        values.jumlah_harga,
+        values.status,
+        values.tanggal_penjualan
+      ]),
+    ],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Menambahkan Data!", res);
+      }
+    }
+  );
+};
+
 //menampilkan keranjang id user
 exports.tampilKeranjangIdUser = function (req, res) {
   let id_user = req.params.id_user;
@@ -778,6 +812,22 @@ exports.tampilPengambilan = function (req, res) {
   );
 };
 
+//tampil pengambilan id
+exports.tampilPengambilanID = function (req, res) {
+  let id = req.params.id_pengambilan;
+  connection.query(
+    "SELECT * FROM pengambilan WHERE id_pengambilan=?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
 //menampilkan semua data penjualan
 exports.tampilPenjualan = function (req, res) {
   connection.query(
@@ -797,6 +847,22 @@ exports.hapusPenjualan = function (req, res) {
   var id = req.body.id_penjualan;
   connection.query(
     "DELETE FROM penjualan WHERE penjualan.id_penjualan = ?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil hapus data", res);
+      }
+    }
+  );
+};
+
+//hapus list penjualan
+exports.hapusPengambilan = function (req, res) {
+  var id = req.body.id_pengambilan;
+  connection.query(
+    "DELETE FROM pengambilan WHERE pengambilan.id_pengambilan = ?",
     [id],
     function (error, rows, field) {
       if (error) {

@@ -97,9 +97,15 @@ module.exports = function (app) {
 
   app.route("/tampilPengambilan").get(jsonku.tampilPengambilan);
 
+  app.route("/tampilPengambilan/:id_pengambilan").get(jsonku.tampilPengambilanID);
+
   app.route("/tambahJual").post(jsonku.tambahPenjualan);
 
+  app.route("/tambahPengambilan").post(jsonku.tambahPengambilan);
+
   app.route("/hapusJual").delete(jsonku.hapusPenjualan);
+
+  app.route("/hapusPengambilan").delete(jsonku.hapusPengambilan);
 
   /*=================USER==============*/
   app.route("/tampil").get(jsonku.tampilUser);
