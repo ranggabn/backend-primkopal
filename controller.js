@@ -447,19 +447,10 @@ exports.tambahPinjaman = function (req, res) {
   var besar_pinjaman = req.body.besar_pinjaman;
   var terbilang = req.body.terbilang;
   var keperluan = req.body.keperluan;
-  // var besar_cicilan = req.body.besar_cicilan;
-  // var kta = req.body.kta;
-  // var ktp_pemohon = req.body.ktp_pemohon;  
-  // var ktp_pasangan = req.body.ktp_pasangan;
-  // var slip_gaji = req.body.slip_gaji;
-  // var rincian_gaji = req.body.rincian_gaji;
-  // var kk = req.body.kk;
-  // var spk = req.body.spk;
-  // var asuransi = req.body.asuransi;
-  // var bebas_hutang = req.body.bebas_hutang;
+  var persyaratan = req.body.persyaratan;
   var tanggal_pinjam = req.body.tanggal_pinjam;
   connection.query(
-    "INSERT INTO pinjaman (id_user, id_status, id_cicil, besar_pinjaman, terbilang, keperluan, tanggal_pinjam) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO pinjaman (id_user, id_status, id_cicil, besar_pinjaman, terbilang, keperluan, persyaratan, tanggal_pinjam) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
     [
       id_user,
       id_status,
@@ -467,6 +458,7 @@ exports.tambahPinjaman = function (req, res) {
       besar_pinjaman,
       terbilang,
       keperluan,
+      persyaratan,      
       tanggal_pinjam,
     ],
     function (error, rows, field) {
