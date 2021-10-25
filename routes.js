@@ -95,6 +95,8 @@ module.exports = function (app) {
 
   app.route("/tampilJual").get(jsonku.tampilPenjualan);
 
+  app.route("/tampilPenjualan/:id").get(jsonku.tampilPenjualanid);
+
   app.route("/tampilPengambilan").get(jsonku.tampilPengambilan);
 
   app.route("/tampilPengambilan/:id_pengambilan").get(jsonku.tampilPengambilanID);
@@ -104,6 +106,8 @@ module.exports = function (app) {
   app.route("/tambahPengambilan").post(jsonku.tambahPengambilan);
 
   app.route("/hapusJual").delete(jsonku.hapusPenjualan);
+
+  app.route("/ubahPenjualan").put(jsonku.ubahPenjualan);
 
   app.route("/hapusPengambilan").delete(jsonku.hapusPengambilan);
 

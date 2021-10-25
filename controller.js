@@ -117,16 +117,15 @@ exports.tampilKategori = function (req, res) {
 //mengubah data barang berdasarkan id
 exports.ubahBarang = function (req, res) {
   var id = req.body.id_barang;
-  var id_kategori = req.body.id_kategori;
-  var id_status = req.body.id_status;
+  var id_kategori = req.body.id_kategori;  
   var nama = req.body.nama;
   var harga = req.body.harga;
   var stok = req.body.stok;
   var keterangan = req.body.keterangan;
   var gambar = req.body.gambar;
   connection.query(
-    "UPDATE barang SET id_kategori = ?, id_status = ?, nama = ?, harga = ?, stok = ?, keterangan = ?, gambar = ? WHERE barang.id_barang = ?",
-    [id_kategori, id_status, nama, harga, stok, keterangan, gambar, id],
+    "UPDATE barang SET id_kategori = ?, nama = ?, harga = ?, stok = ?, keterangan = ?, gambar = ? WHERE barang.id_barang = ?",
+    [id_kategori, nama, harga, stok, keterangan, gambar, id],
     function (error, rows, field) {
       if (error) {
         console.log(error);
@@ -209,7 +208,7 @@ exports.hapusSimpanan = function (req, res) {
 exports.tampilsimpananid = function (req, res) {
   let id = req.params.id;
   connection.query(
-    "SELECT * FROM simpan join user WHERE simpan.id_user = user.id AND id_simpanan=?",
+    "SELECT * FROM simpan WHERE id_simpanan=?",
     [id],
     function (error, rows, field) {
       if (error) {
@@ -226,7 +225,6 @@ exports.ubahSimpanan = function (req, res) {
   var id = req.body.id_simpanan;
   var jumlah_simpanan = req.body.jumlah_simpanan;
   var terbilang = req.body.terbilang;
-
   connection.query(
     "UPDATE simpan SET jumlah_simpanan = ?, terbilang = ? WHERE simpan.id_simpanan = ?",
     [jumlah_simpanan, terbilang, id],
@@ -446,19 +444,21 @@ exports.tambahPinjaman = function (req, res) {
   var id_cicil = req.body.id_cicil;
   var besar_pinjaman = req.body.besar_pinjaman;
   var terbilang = req.body.terbilang;
+  var besar_cicilan = req.body.besar_cicilan;
   var keperluan = req.body.keperluan;
   var persyaratan = req.body.persyaratan;
   var tanggal_pinjam = req.body.tanggal_pinjam;
   connection.query(
-    "INSERT INTO pinjaman (id_user, id_status, id_cicil, besar_pinjaman, terbilang, keperluan, persyaratan, tanggal_pinjam) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO pinjaman (id_user, id_status, id_cicil, besar_pinjaman, terbilang, besar_cicilan, keperluan, persyaratan, tanggal_pinjam) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
     [
       id_user,
       id_status,
       id_cicil,
       besar_pinjaman,
       terbilang,
+      besar_cicilan,
       keperluan,
-      persyaratan,      
+      persyaratan,
       tanggal_pinjam,
     ],
     function (error, rows, field) {
@@ -590,11 +590,19 @@ exports.tambahKeranjang = function (req, res) {
   var jumlah_harga = req.body.jumlah_harga;
   var total_harga = req.body.total_harga;
   var jumlah = req.body.jumlah;
-  var status = req.body.status
+  var status = req.body.status;
   var tanggal_penjualan = req.body.tanggal_penjualan;
   connection.query(
     "INSERT INTO keranjang (id_user, id_barang, jumlah_harga, total_harga, jumlah, status, tanggal_penjualan) VALUES (?, ?, ?, ?, ?, ?, ?)",
-    [id_user, id_barang, jumlah_harga, total_harga, jumlah, status, tanggal_penjualan],
+    [
+      id_user,
+      id_barang,
+      jumlah_harga,
+      total_harga,
+      jumlah,
+      status,
+      tanggal_penjualan,
+    ],
     function (error, rows, field) {
       if (error) {
         console.log(error);
@@ -715,7 +723,7 @@ exports.tambahPenjualan = function (req, res) {
       jumlah: req.body.jumlah,
       jumlah_harga: req.body.jumlah_harga,
       status: req.body.status,
-      tanggal_penjualan: req.body.tanggal_penjualan,      
+      tanggal_penjualan: req.body.tanggal_penjualan,
     },
   ];
   connection.query(
@@ -727,7 +735,7 @@ exports.tambahPenjualan = function (req, res) {
         values.jumlah,
         values.jumlah_harga,
         values.status,
-        values.tanggal_penjualan
+        values.tanggal_penjualan,
       ]),
     ],
     function (error, rows, field) {
@@ -749,7 +757,7 @@ exports.tambahPengambilan = function (req, res) {
       jumlah: req.body.jumlah,
       jumlah_harga: req.body.jumlah_harga,
       status: req.body.status,
-      tanggal_penjualan: req.body.tanggal_penjualan,      
+      tanggal_penjualan: req.body.tanggal_penjualan,
     },
   ];
   connection.query(
@@ -761,7 +769,7 @@ exports.tambahPengambilan = function (req, res) {
         values.jumlah,
         values.jumlah_harga,
         values.status,
-        values.tanggal_penjualan
+        values.tanggal_penjualan,
       ]),
     ],
     function (error, rows, field) {
@@ -829,6 +837,42 @@ exports.tampilPenjualan = function (req, res) {
         console.log(error);
       } else {
         response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//menampilkan data barang berdasarkan id
+exports.tampilPenjualanid = function (req, res) {
+  let id = req.params.id;
+  connection.query(
+    "SELECT * FROM penjualan join barang join user WHERE penjualan.id_barang = barang.id_barang AND penjualan.id_user = user.id AND id_penjualan=?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+//ubah penjualan
+exports.ubahPenjualan = function (req, res) {
+  var id_user = req.body.id_user;
+  var jumlah = req.body.jumlah;
+  var jumlah_harga = req.body.jumlah_harga;
+  var status = req.body.status;
+  var id_penjualan = req.body.id_penjualan;
+  connection.query(
+    "UPDATE penjualan SET id_user = ?, jumlah = ?, jumlah_harga = ?, status = ? WHERE penjualan.id_penjualan = ?",
+    [id_user, jumlah, jumlah_harga, status, id_penjualan],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Mengubah Data!", res);
       }
     }
   );
@@ -932,11 +976,20 @@ exports.tambahAnggota = function (req, res) {
   var tempat_lahir = req.body.tempat_lahir;
   var tanggal_lahir = req.body.tanggal_lahir;
   var nomor_telefon = req.body.nomor_telefon;
-  var role = req.body.role
-  var tanggal_daftar = req.body.tanggal_daftar
+  var role = req.body.role;
+  var tanggal_daftar = req.body.tanggal_daftar;
   connection.query(
     "INSERT INTO user (id, username, satker, tempat_lahir, tanggal_lahir, nomor_telefon, role, tanggal_daftar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-    [id, username, satker, tempat_lahir, tanggal_lahir, nomor_telefon, role, tanggal_daftar],
+    [
+      id,
+      username,
+      satker,
+      tempat_lahir,
+      tanggal_lahir,
+      nomor_telefon,
+      role,
+      tanggal_daftar,
+    ],
     function (error, rows, field) {
       if (error) {
         console.log(error);
@@ -958,7 +1011,16 @@ exports.ubahAnggota = function (req, res) {
   var role = req.body.role;
   connection.query(
     "UPDATE user SET id = ?, username = ?, satker = ?, tempat_lahir = ?, tanggal_lahir = ?, nomor_telefon = ?, role = ? WHERE user.id = ?",
-    [id, username, satker, tempat_lahir, tanggal_lahir, nomor_telefon, role, id],
+    [
+      id,
+      username,
+      satker,
+      tempat_lahir,
+      tanggal_lahir,
+      nomor_telefon,
+      role,
+      id,
+    ],
     function (error, rows, field) {
       if (error) {
         console.log(error);
@@ -976,7 +1038,7 @@ exports.ubahProfil = function (req, res) {
   var satker = req.body.satker;
   var tempat_lahir = req.body.tempat_lahir;
   var tanggal_lahir = req.body.tanggal_lahir;
-  var nomor_telefon = req.body.nomor_telefon;  
+  var nomor_telefon = req.body.nomor_telefon;
   connection.query(
     "UPDATE user SET id = ?, username = ?, satker = ?, tempat_lahir = ?, tanggal_lahir = ?, nomor_telefon = ? WHERE user.id = ?",
     [id, username, satker, tempat_lahir, tanggal_lahir, nomor_telefon, id],
