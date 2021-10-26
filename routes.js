@@ -31,9 +31,15 @@ module.exports = function (app) {
 
   app.route("/tambahSimpanan").post(jsonku.tambahSimpanan);
 
+  app.route("/tambahPenarikan").post(jsonku.tambahPenarikan);
+
   app.route("/hapusSimpanan").delete(jsonku.hapusSimpanan);
 
   app.route("/ubahSimpanan").put(jsonku.ubahSimpanan);
+
+  app.route("/totalSaldo/:id_user").get(jsonku.totalSaldo);
+
+  app.route("/totalPenarikan/:id_user").get(jsonku.totalPenarikan);
 
   /*=================KREDIT==============*/
   app.route("/tambahKredit").post(jsonku.tambahKredit);

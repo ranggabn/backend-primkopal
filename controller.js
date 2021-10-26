@@ -157,7 +157,7 @@ exports.ubahBarang2 = function (req, res) {
 //menampilkan semua data simpanan
 exports.tampilSimpanan = function (req, res) {
   connection.query(
-    "SELECT simpan.id_simpanan, simpan.id_user, simpan.jumlah_simpanan, simpan.terbilang, simpan.tanggal_simpan, user.id, user.username FROM simpan JOIN user WHERE simpan.id_user = user.id ORDER BY simpan.tanggal_simpan DESC",
+    "SELECT simpan.id_simpanan, simpan.id_user, simpan.jumlah_simpanan, simpan.penarikan, simpan.keterangan, simpan.tanggal_simpan, user.id, user.username FROM simpan JOIN user WHERE simpan.id_user = user.id ORDER BY simpan.id_simpanan DESC",
     function (error, rows, field) {
       if (error) {
         console.log(error);
@@ -178,6 +178,26 @@ exports.tambahSimpanan = function (req, res) {
   connection.query(
     "INSERT INTO simpan (id_user, jumlah_simpanan, terbilang, tanggal_simpan, bukti_transfer) VALUES (?, ?, ?, ?, ?)",
     [id_user, jumlah_simpanan, terbilang, tanggal_simpan, bukti_transfer],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Menambahkan Data!", res);
+      }
+    }
+  );
+};
+
+//menambahkan penarikan
+exports.tambahPenarikan = function (req, res) {
+  var id_user = req.body.id_user;
+  var penarikan = req.body.penarikan;
+  var terbilang = req.body.terbilang;
+  var keterangan = req.body.keterangan
+  var tanggal_simpan = req.body.tanggal_simpan;
+  connection.query(
+    "INSERT INTO simpan (id_user, penarikan, terbilang, keterangan, tanggal_simpan) VALUES (?, ?, ?, ?, ?)",
+    [id_user, penarikan, terbilang, keterangan, tanggal_simpan],
     function (error, rows, field) {
       if (error) {
         console.log(error);
@@ -242,7 +262,37 @@ exports.ubahSimpanan = function (req, res) {
 exports.tampilsimpananiduser = function (req, res) {
   let id_user = req.params.id_user;
   connection.query(
-    "SELECT * FROM simpan join user WHERE simpan.id_user = user.id AND id_user=? ORDER BY tanggal_simpan DESC",
+    "SELECT * FROM simpan join user WHERE simpan.id_user = user.id AND id_user=? ORDER BY id_simpanan DESC",
+    [id_user],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+exports.totalSaldo = function (req, res) {
+  let id_user = req.params.id_user;
+  connection.query(
+    "SELECT SUM(jumlah_simpanan) AS total_saldo FROM simpan WHERE id_user=?",
+    [id_user],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+exports.totalPenarikan = function (req, res) {
+  let id_user = req.params.id_user;
+  connection.query(
+    "SELECT SUM(penarikan) AS total_penarikan FROM simpan WHERE id_user=?",
     [id_user],
     function (error, rows, field) {
       if (error) {
