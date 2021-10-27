@@ -44,8 +44,6 @@ module.exports = function (app) {
   /*=================KREDIT==============*/
   app.route("/tambahKredit").post(jsonku.tambahKredit);
 
-  app.route("/tampilStatusKP").get(jsonku.tampilStatusKP);
-
   app.route("/tampilCicilan/:tipe_cicilan").get(jsonku.tampilCicilan);
 
   app.route("/tampilCicilan").get(jsonku.tampilAllCicilan);
@@ -131,4 +129,9 @@ module.exports = function (app) {
   app.route("/ubahProfil").put(jsonku.ubahProfil);
 
   app.route("/hapus").delete(jsonku.hapusUser);
+
+   /*=================Komplain==============*/
+   app.route("/tampilKomplain").get(jsonku.tampilKomplain);
+
+   app.route("/tambahKomplain").post(jsonku.tambahKomplain);
 };
