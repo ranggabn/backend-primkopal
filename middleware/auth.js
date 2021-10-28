@@ -12,7 +12,7 @@ exports.reqistrasi = function (req, res) {
     username: req.body.username,
     id: req.body.id,
     password: md5(req.body.password),
-    role: 3,
+    role: 4,
     satker: req.body.satker,
     nomor_telefon: req.body.nomor_telefon,
     tempat_lahir: req.body.tempat_lahir,
