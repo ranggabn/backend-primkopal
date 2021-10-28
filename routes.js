@@ -122,11 +122,17 @@ module.exports = function (app) {
 
   app.route("/tampilRole").get(jsonku.tampilRole);
 
-  app.route("/tampil/:id").get(jsonku.tampilUserId);  
+  app.route("/tampil/:id").get(jsonku.tampilUserId);
+
+  app.route("/tampilpassword/:id").get(jsonku.tampilpassword);
 
   app.route("/ubah").put(jsonku.ubahAnggota);
 
   app.route("/ubahProfil").put(jsonku.ubahProfil);
+
+  app.route("/lupaPassword").put(jsonku.lupaPassword);
+
+  app.route("/resetPassword").put(jsonku.resetPassword);
 
   app.route("/hapus").delete(jsonku.hapusUser);
 

@@ -2,6 +2,7 @@
 
 var response = require("./res");
 var connection = require("./koneksi");
+const md5 = require("MD5");
 
 exports.index = function (req, res) {
   response.ok("Aplikasi berjalan", res);
@@ -117,7 +118,7 @@ exports.tampilKategori = function (req, res) {
 //mengubah data barang berdasarkan id
 exports.ubahBarang = function (req, res) {
   var id = req.body.id_barang;
-  var id_kategori = req.body.id_kategori;  
+  var id_kategori = req.body.id_kategori;
   var nama = req.body.nama;
   var harga = req.body.harga;
   var stok = req.body.stok;
@@ -193,7 +194,7 @@ exports.tambahPenarikan = function (req, res) {
   var id_user = req.body.id_user;
   var penarikan = req.body.penarikan;
   var terbilang = req.body.terbilang;
-  var keterangan = req.body.keterangan
+  var keterangan = req.body.keterangan;
   var tanggal_simpan = req.body.tanggal_simpan;
   connection.query(
     "INSERT INTO simpan (id_user, penarikan, terbilang, keterangan, tanggal_simpan) VALUES (?, ?, ?, ?, ?)",
@@ -308,7 +309,7 @@ exports.totalPenarikan = function (req, res) {
 
 //menambahkan data kredit
 exports.tambahKredit = function (req, res) {
-  var id_user = req.body.id_user;  
+  var id_user = req.body.id_user;
   var id_cicilan = req.body.id_cicilan;
   var nama_barang = req.body.nama_barang;
   var harga = req.body.harga;
@@ -323,7 +324,7 @@ exports.tambahKredit = function (req, res) {
       nama_barang,
       harga,
       terbilang,
-      besar_cicilan,      
+      besar_cicilan,
       tanggal_kredit,
     ],
     function (error, rows, field) {
@@ -436,15 +437,7 @@ exports.ubahKredit = function (req, res) {
   var status = req.body.status;
   connection.query(
     "UPDATE kredit SET id_cicil = ?, nama_barang = ?, harga = ?, terbilang = ?, besar_cicilan = ?, status = ? WHERE kredit.id_kredit = ?",
-    [
-      id_cicil,
-      nama_barang,
-      harga,
-      terbilang,
-      besar_cicilan,
-      status,
-      id,
-    ],
+    [id_cicil, nama_barang, harga, terbilang, besar_cicilan, status, id],
     function (error, rows, field) {
       if (error) {
         console.log(error);
@@ -480,7 +473,7 @@ exports.tambahPinjaman = function (req, res) {
   connection.query(
     "INSERT INTO pinjaman (id_user, id_cicil, besar_pinjaman, terbilang, besar_cicilan, keperluan, persyaratan, tanggal_pinjam) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
     [
-      id_user,      
+      id_user,
       id_cicil,
       besar_pinjaman,
       terbilang,
@@ -564,7 +557,7 @@ exports.tampilpinjamaniduser = function (req, res) {
 //ubah data pinjaman
 exports.ubahPinjaman = function (req, res) {
   var id = req.body.id_pinjaman;
-  var id_cicil = req.body.id_cicil;  
+  var id_cicil = req.body.id_cicil;
   var besar_pinjaman = req.body.besar_pinjaman;
   var terbilang = req.body.terbilang;
   var keperluan = req.body.keperluan;
@@ -574,7 +567,7 @@ exports.ubahPinjaman = function (req, res) {
   connection.query(
     "UPDATE pinjaman SET id_cicil = ?, besar_pinjaman = ?, terbilang = ?, keperluan = ?, besar_cicilan = ?, status_kaprim = ?, status_kasatker = ? WHERE pinjaman.id_pinjaman = ?",
     [
-      id_cicil,      
+      id_cicil,
       besar_pinjaman,
       terbilang,
       keperluan,
@@ -943,10 +936,7 @@ exports.tambahKomplain = function (req, res) {
   var tanggal = req.body.tanggal;
   connection.query(
     "INSERT INTO komplain (komplain, tanggal) VALUES (?, ?)",
-    [
-      komplain,
-      tanggal
-    ],
+    [komplain, tanggal],
     function (error, rows, field) {
       if (error) {
         console.log(error);
@@ -972,7 +962,6 @@ exports.tampilKomplain = function (req, res) {
 };
 
 // =================User==============
-
 
 //menampilkan semua data user
 exports.tampilUser = function (req, res) {
@@ -1009,6 +998,21 @@ exports.tampilUserId = function (req, res) {
   let id = req.params.id;
   connection.query(
     "SELECT * FROM user WHERE user.id=?",
+    [id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+exports.tampilpassword = function (req, res) {
+  let id = req.params.id;
+  connection.query(
+    "SELECT id, password FROM user WHERE user.id=?",
     [id],
     function (error, rows, field) {
       if (error) {
@@ -1106,6 +1110,39 @@ exports.ubahProfil = function (req, res) {
   connection.query(
     "UPDATE user SET id = ?, username = ?, satker = ?, tempat_lahir = ?, tanggal_lahir = ?, nomor_telefon = ? WHERE user.id = ?",
     [id, username, satker, tempat_lahir, tanggal_lahir, nomor_telefon, id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Mengubah Data!", res);
+      }
+    }
+  );
+};
+
+exports.lupaPassword = function (req, res) {
+  var id = req.body.id;
+  var lupa_password = req.body.lupa_password;
+  connection.query(
+    "UPDATE user SET lupa_password = ? WHERE user.id = ?",
+    [lupa_password, id],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok("Berhasil Mengubah Data!", res);
+      }
+    }
+  );
+};
+
+exports.resetPassword = function (req, res) {
+  var id = req.body.id;
+  var lupa_password = req.body.lupa_password;
+  var password = md5(req.body.password);
+  connection.query(
+    "UPDATE user SET lupa_password = ?, password = ? WHERE user.id = ?",
+    [lupa_password, password, id],
     function (error, rows, field) {
       if (error) {
         console.log(error);

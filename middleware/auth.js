@@ -241,6 +241,79 @@ exports.ubahpassword = function (req, res) {
   });
 };
 
+exports.resetpassword = function (req, res) {
+  var data = {
+    id: req.body.id,
+    currpassword: req.body.currpassword,
+    newpassword: md5(req.body.newpassword),
+    lupa_password: req.body.lupa_password
+  };
+
+  var query = "SELECT id, password FROM ?? WHERE ??=?";
+  var table = ["user", "id", data.id];
+
+  query = mysql.format(query, table);
+
+  connection.query(query, function (error, rows) {
+    if (error) {
+      console.log(error);
+    } else {
+      if (rows.length == 1) {
+        id = rows[0].id;
+        password = rows[0].password;
+        lupa_password = rows[0].lupa_password
+        if (data.currpassword == password) {
+          if (data.newpassword == data.currpassword) {
+            res
+              .json({
+                success: false,
+                message: "Password masih sama dengan yang sebelumnya!",
+              })
+              .end();
+          } else {
+            connection.query(
+              "UPDATE user SET password=?, lupa_password=? WHERE id=?",
+              [data.newpassword, lupa_password, id],
+              function (error) {
+                if (error) {
+                  res
+                    .json({
+                      success: false,
+                      message: error,
+                    })
+                    .end();
+                } else {
+                  res
+                    .json({
+                      success: true,
+                      message: "Berhasil melakukan perubahan password!",
+                    })
+                    .end();
+                }
+              }
+            );
+          }
+        } else {
+          res
+            .json({
+              success: false,
+              message: "Password lama anda salah!",
+            })
+            .end();
+        }
+      } else {
+        res
+          .json({
+            success: false,
+            message: "User tidak tersedia",
+          })
+          .end();
+      }
+    }
+  });
+};
+
+
 exports.halamanrahasia = function (req, res) {
   response.ok("halaman ini hanya untuk user dengan role 2", res);
 };
