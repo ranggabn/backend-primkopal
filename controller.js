@@ -76,7 +76,7 @@ exports.tampilbarangid = function (req, res) {
       }
     }
   );
-};
+}; 
 
 //menampilkan data barang berdasarkan id kategori
 exports.tampilbarangidkategori = function (req, res) {
@@ -246,9 +246,10 @@ exports.ubahSimpanan = function (req, res) {
   var id = req.body.id_simpanan;
   var jumlah_simpanan = req.body.jumlah_simpanan;
   var terbilang = req.body.terbilang;
+  var keterangan = req.body.keterangan;
   connection.query(
-    "UPDATE simpan SET jumlah_simpanan = ?, terbilang = ? WHERE simpan.id_simpanan = ?",
-    [jumlah_simpanan, terbilang, id],
+    "UPDATE simpan SET jumlah_simpanan = ?, terbilang = ?, keterangan = ? WHERE simpan.id_simpanan = ?",
+    [jumlah_simpanan, terbilang, keterangan, id],
     function (error, rows, field) {
       if (error) {
         console.log(error);
