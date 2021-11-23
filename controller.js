@@ -76,7 +76,7 @@ exports.tampilbarangid = function (req, res) {
       }
     }
   );
-}; 
+};
 
 //menampilkan data barang berdasarkan id kategori
 exports.tampilbarangidkategori = function (req, res) {
@@ -344,6 +344,19 @@ exports.tampilCicilan = function (req, res) {
   connection.query(
     "SELECT * FROM cicilan WHERE cicilan.tipe_cicilan = ?",
     [tipe_cicilan],
+    function (error, rows, field) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.ok(rows, res);
+      }
+    }
+  );
+};
+
+exports.tampilCicilan2 = function (req, res) {
+  connection.query(
+    "SELECT * FROM cicilan WHERE cicilan.tipe_cicilan IN (1,2) ",
     function (error, rows, field) {
       if (error) {
         console.log(error);

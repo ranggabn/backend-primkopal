@@ -48,6 +48,8 @@ module.exports = function (app) {
 
   app.route("/tampilCicilan").get(jsonku.tampilAllCicilan);
 
+  app.route("/tampilCicilan2").get(jsonku.tampilCicilan2);
+
   app.route("/tampilKredit").get(jsonku.tampilkredit);
 
   app.route("/tampilKredit/:id").get(jsonku.tampilkreditid);
@@ -77,7 +79,7 @@ module.exports = function (app) {
   /*=================TOKO==============*/
   app.route("/tampilKategori").get(jsonku.tampilKategori);
 
-  app.route("/tampilbarangIdKategori/:id").get(jsonku.tampilbarangidkategori)
+  app.route("/tampilbarangIdKategori/:id").get(jsonku.tampilbarangidkategori);
 
   app.route("/tambahKeranjang").post(jsonku.tambahKeranjang);
 
@@ -85,7 +87,9 @@ module.exports = function (app) {
 
   app.route("/tampilKeranjangUser/:id_user").get(jsonku.tampilKeranjangIdUser);
 
-  app.route("/tampilKeranjangBarang/:id_barang").get(jsonku.tampilKeranjangIdBarang);
+  app
+    .route("/tampilKeranjangBarang/:id_barang")
+    .get(jsonku.tampilKeranjangIdBarang);
 
   app.route("/ubahKeranjang").put(jsonku.ubahKeranjang);
 
@@ -103,7 +107,9 @@ module.exports = function (app) {
 
   app.route("/tampilPengambilan").get(jsonku.tampilPengambilan);
 
-  app.route("/tampilPengambilan/:id_pengambilan").get(jsonku.tampilPengambilanID);
+  app
+    .route("/tampilPengambilan/:id_pengambilan")
+    .get(jsonku.tampilPengambilanID);
 
   app.route("/tambahJual").post(jsonku.tambahPenjualan);
 
@@ -136,8 +142,8 @@ module.exports = function (app) {
 
   app.route("/hapus").delete(jsonku.hapusUser);
 
-   /*=================Komplain==============*/
-   app.route("/tampilKomplain").get(jsonku.tampilKomplain);
+  /*=================Komplain==============*/
+  app.route("/tampilKomplain").get(jsonku.tampilKomplain);
 
-   app.route("/tambahKomplain").post(jsonku.tambahKomplain);
+  app.route("/tambahKomplain").post(jsonku.tambahKomplain);
 };
