@@ -1,6 +1,6 @@
 var connection = require("../koneksi");
 var mysql = require("mysql");
-var md5 = require("MD5");
+var md5 = require("md5");
 var response = require("../res");
 var jwt = require("jsonwebtoken");
 var config = require("../config/secret");
@@ -246,7 +246,7 @@ exports.resetpassword = function (req, res) {
     id: req.body.id,
     currpassword: req.body.currpassword,
     newpassword: md5(req.body.newpassword),
-    lupa_password: req.body.lupa_password
+    lupa_password: req.body.lupa_password,
   };
 
   var query = "SELECT id, password FROM ?? WHERE ??=?";
@@ -261,7 +261,7 @@ exports.resetpassword = function (req, res) {
       if (rows.length == 1) {
         id = rows[0].id;
         password = rows[0].password;
-        lupa_password = rows[0].lupa_password
+        lupa_password = rows[0].lupa_password;
         if (data.currpassword == password) {
           if (data.newpassword == data.currpassword) {
             res
@@ -312,7 +312,6 @@ exports.resetpassword = function (req, res) {
     }
   });
 };
-
 
 exports.halamanrahasia = function (req, res) {
   response.ok("halaman ini hanya untuk user dengan role 2", res);

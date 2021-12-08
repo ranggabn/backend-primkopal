@@ -2,7 +2,7 @@
 
 var response = require("./res");
 var connection = require("./koneksi");
-const md5 = require("MD5");
+const md5 = require("md5");
 
 exports.index = function (req, res) {
   response.ok("Aplikasi berjalan", res);
