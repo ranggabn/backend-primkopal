@@ -18,7 +18,7 @@ routes(app);
 //daftarkan menu routes dari index
 app.use("/auth", require("./middleware"));
 
-app.listen(process.env.PORT || 3000, function () {
+app.listen(process.env.PORT || 28290, function () {
   console.log(
     "Express server listening on port %d in %s mode",
     this.address().port,
