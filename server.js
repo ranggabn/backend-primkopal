@@ -18,4 +18,6 @@ routes(app);
 //daftarkan menu routes dari index
 app.use("/auth", require("./middleware"));
 
-app.listen(process.env.PORT || 5000);
+app.listen(3001, () => {
+  console.log("Server started on port 3001");
+});
