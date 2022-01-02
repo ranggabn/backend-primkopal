@@ -864,7 +864,7 @@ exports.tampilPengambilanID = function (req, res) {
 //menampilkan semua data penjualan
 exports.tampilPenjualan = function (req, res) {
   connection.query(
-    "SELECT * FROM penjualan join barang join user WHERE penjualan.id_barang = barang.id_barang AND penjualan.id_user = user.id ORDER BY penjualan.id_penjualan",
+    "SELECT * FROM penjualan join barang join user WHERE penjualan.id_barang = barang.id_barang AND penjualan.id_user = user.id ORDER BY penjualan.id_penjualan DESC",
     function (error, rows, field) {
       if (error) {
         console.log(error);
